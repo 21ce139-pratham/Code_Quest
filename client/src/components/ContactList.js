@@ -5,6 +5,8 @@ import axios from 'axios';
 const ContactList = () => {
     const [contacts, setContacts] = useState([]);
 
+
+    
     useEffect(() => {
         const fetchContacts = async () => {
             const result = await axios.get('/api/contacts');
