@@ -1,17 +1,18 @@
 // src/components/ContactList.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Navigate } from 'react-router-dom';
 
 const ContactList = () => {
     const [contacts, setContacts] = useState([]);
+    const token = localStorage.getItem('token');
 
     useEffect(() => {
         const fetchContacts = async () => {
             try {
-                const token = localStorage.getItem('token'); // Get the token from local storage or wherever you store it
                 const result = await axios.get('http://localhost:5000/api/contacts/getContacts', {
                     headers: {
-                        Authorization: `Bearer ${token}`, // Include token in Authorization header
+                        Authorization: `Bearer ${token}`,
                     },
                 });
                 setContacts(result.data);
@@ -19,8 +20,16 @@ const ContactList = () => {
                 console.error('Error fetching contacts:', error);
             }
         };
-        fetchContacts();
-    }, []);
+
+        if (token) {
+            fetchContacts();
+        }
+    }, [token]);
+
+    // Redirect if not authenticated
+    if (!token) {
+        return <Navigate to="/login" />;
+    }
 
     return (
         <div>
