@@ -7,4 +7,13 @@ exports.createContact = async (req, res) => {
     res.status(201).json(contact);
 };
 
+exports.getContacts = async (req, res) => {
+    try {
+        const contacts = await Contact.find({ userId: req.user.id }); // Filter by user ID
+        res.json(contacts);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 // Additional CRUD functions (get, update, delete) would go here
